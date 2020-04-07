@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_07_150104) do
+ActiveRecord::Schema.define(version: 2020_04_07_165732) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,4 +67,21 @@ ActiveRecord::Schema.define(version: 2020_04_07_150104) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "children", force: :cascade do |t|
+    t.string "name"
+    t.string "currentGradeOrYearGraduated"
+    t.bigint "alumni_id", null: false
+    t.index ["alumni_id"], name: "index_children_on_alumni_id"
+  end
+
+  create_table "siblings", force: :cascade do |t|
+    t.string "name"
+    t.string "yearFinished"
+    t.string "school"
+    t.bigint "alumni_id", null: false
+    t.index ["alumni_id"], name: "index_siblings_on_alumni_id"
+  end
+
+  add_foreign_key "children", "alumnis"
+  add_foreign_key "siblings", "alumnis"
 end

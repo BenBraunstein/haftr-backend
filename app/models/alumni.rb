@@ -1,4 +1,6 @@
 class Alumni < ApplicationRecord
+    has_many :children
+    has_many :siblings
 
     def clubsArr
         return self.clubs.split(',')
