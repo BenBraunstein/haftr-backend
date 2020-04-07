@@ -1,7 +1,7 @@
 class CreateAlumnis < ActiveRecord::Migration[6.0]
   def change
     create_table :alumnis do |t|
-      t.string :firstName
+      t.string :firstName 
       t.string :lastName
       t.string :middleName
       t.string :marriedName
@@ -22,14 +22,14 @@ class CreateAlumnis < ActiveRecord::Migration[6.0]
       t.string :hillelDaySpecialty
       t.string :hillelSleepSpecialty
       
-      t.date :birthday
+      t.date :birthday 
 
-      t.string :clubs
-      t.string :sportsTeams
-      t.string :cheerleading
-      t.string :awards
-      t.string :committees
-      t.string :oldAddresses
+      t.string :clubs, :default => ""
+      t.string :sportsTeams, :default => ""
+      t.string :cheerleading, :default => ""
+      t.string :awards, :default => ""
+      t.string :committees, :default => ""
+      t.string :oldAddresses, :default => ""
 
       t.boolean :hili
       t.boolean :hillel
