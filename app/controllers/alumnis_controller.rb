@@ -4,9 +4,21 @@ class AlumnisController < ApplicationController
         alumnis = Alumni.all 
         render json: alumnis
     end
+
     def create 
-        byebug
         alum = Alumni.create(strong_alum_params)
+        render json: alum
+    end
+
+    def update 
+        alum = Alumni.find(params[:id])
+        alum.update(strong_alum_params)
+        render json: alum
+    end
+
+    def destroy 
+        alum = Alumni.find(params[:id])
+        alum.destroy()
         render json: alum
     end
 
