@@ -1,6 +1,6 @@
 class Alumni < ApplicationRecord
     has_many :children
-    has_many :siblings
+    has_many :siblings, dependent: :destroy
 
     def clubsArr
         return self.clubs.split(',')
