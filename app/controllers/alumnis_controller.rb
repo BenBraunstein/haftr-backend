@@ -9,7 +9,9 @@ class AlumnisController < ApplicationController
     def create 
         alum = Alumni.create(strong_alum_params)
         siblings = params[:siblings]
+        children = params[:children]
         siblings.each {|sibling| create_sibling(sibling, alum)}
+        children.each {|child| create_child(child, alum)}
         render json: alum
     end
 
@@ -31,6 +33,10 @@ class AlumnisController < ApplicationController
 
     def create_sibling(sibling, alum)
         Sibling.create(name: sibling[:name], yearFinished: sibling[:yearFinished], school: sibling[:school], alumni: alum)
+    end
+
+    def create_child(child, alum)
+        Child.create(name: child[:name], currentGradeOrYearGraduated: child[:currentGradeOrYearGraduated], alumni: alum)
     end
 
 end
