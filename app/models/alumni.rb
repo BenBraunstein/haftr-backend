@@ -3,6 +3,8 @@ class Alumni < ApplicationRecord
     has_many :siblings, dependent: :destroy
     has_many :children, dependent: :destroy
 
+    has_one_attached :photo
+
     def clubsArr
         return self.clubs.split(',')
     end

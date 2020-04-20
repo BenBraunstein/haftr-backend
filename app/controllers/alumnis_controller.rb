@@ -1,9 +1,21 @@
 class AlumnisController < ApplicationController
 
     def index
-        alumnis = Alumni.all 
-        # alumnis = Alumni.all.map {|alum| {alum: alum, siblings: alum.siblings}}
+        # alumnis = Alumni.all 
+        sortedAlumnis = Alumni.order(:id)
+        alumnis = sortedAlumnis.map do |alum|
+           if alum.photo.attached?
+               {
+                   alum: alum, siblings: alum.siblings, children: alum.children, photo: url_for(alum.photo)
+                }
+            else
+                {
+                    alum: alum, siblings: alum.siblings, children: alum.children
+                }
+           end
+        end
         render json: alumnis
+
     end
 
     def create 
