@@ -85,4 +85,16 @@ class AlumnisController < ApplicationController
         end
     end
 
+    def remove_sibling
+        sibling = Sibling.find(params[:id])
+        sibling.destroy()
+        render json: sibling
+    end
+    
+    def remove_child
+        child = Child.find(params[:id])
+        child.destroy()
+        render json: child
+    end
+
 end
