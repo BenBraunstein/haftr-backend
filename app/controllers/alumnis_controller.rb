@@ -32,7 +32,6 @@ class AlumnisController < ApplicationController
         alum = Alumni.find(params[:id])
         siblings = params[:siblings]
         children = params[:children]
-        byebug
         if siblings.length() <= 0 && children.length() <= 0
             if alum.photo.attached?
                 render json: {
