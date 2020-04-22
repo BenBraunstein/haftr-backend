@@ -1,7 +1,6 @@
 class AlumnisController < ApplicationController
 
     def index
-        # alumnis = Alumni.all 
         sortedAlumnis = Alumni.order(:id)
         alumnis = sortedAlumnis.map do |alum|
            if alum.photo.attached?
@@ -33,16 +32,29 @@ class AlumnisController < ApplicationController
         alum = Alumni.find(params[:id])
         siblings = params[:siblings]
         children = params[:children]
-        siblings.each {|sibling| create_sibling(sibling, alum)}
-        children.each {|child| create_child(child, alum)}
-        if alum.photo.attached?
-            render json: {
-                alum: alum, siblings: alum.siblings, children: alum.children, photo: url_for(alum.photo)
-             }
-         else
-            render json: {
-                 alum: alum, siblings: alum.siblings, children: alum.children
-             }
+        byebug
+        if siblings.length() <= 0 && children.length() <= 0
+            if alum.photo.attached?
+                render json: {
+                    alum: alum, siblings: alum.siblings, children: alum.children, photo: url_for(alum.photo)
+                 }
+             else
+                render json: {
+                     alum: alum, siblings: alum.siblings, children: alum.children
+                 }
+            end
+        else
+            siblings.each {|sibling| create_sibling(sibling, alum)}
+            children.each {|child| create_child(child, alum)}
+            if alum.photo.attached?
+                render json: {
+                    alum: alum, siblings: alum.siblings, children: alum.children, photo: url_for(alum.photo)
+                 }
+             else
+                render json: {
+                     alum: alum, siblings: alum.siblings, children: alum.children
+                 }
+            end
         end
     end
 
@@ -57,11 +69,21 @@ class AlumnisController < ApplicationController
     end
 
     def create_sibling(sibling, alum)
-        Sibling.create(name: sibling[:name], yearFinished: sibling[:yearFinished], school: sibling[:school], alumni: alum)
+        siblingExists = Sibling.find_by(alumni: alum, name: sibling[:name])
+        if siblingExists
+            siblingExists.update(name: sibling[:name], yearFinished: sibling[:yearFinished], school: sibling[:school], alumni: alum)
+        else
+            Sibling.create(name: sibling[:name], yearFinished: sibling[:yearFinished], school: sibling[:school], alumni: alum)
+        end
     end
 
     def create_child(child, alum)
-        Child.create(name: child[:name], currentGradeOrYearGraduated: child[:currentGradeOrYearGraduated], alumni: alum)
+        childExists = Child.find_by(alumni: alum, name: child[:name])
+        if childExists
+            childExists.update(name: child[:name], currentGradeOrYearGraduated: child[:currentGradeOrYearGraduated], alumni: alum)
+        else
+            Child.create(name: child[:name], currentGradeOrYearGraduated: child[:currentGradeOrYearGraduated], alumni: alum)
+        end
     end
 
 end
