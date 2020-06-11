@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :users
   patch "/alumnis/addsibsnkids/:id", to: "alumnis#add_sibs_n_kids"
   delete "/siblings/:id", to: "alumnis#remove_sibling"
   delete "/children/:id", to: "alumnis#remove_child"
