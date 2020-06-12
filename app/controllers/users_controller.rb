@@ -6,7 +6,7 @@ class UsersController < ApplicationController
     end
 
     def create
-        user = User.create(strong_user_params)
+        user = User.create({email: params['email'], admin:false})
         user.update(password: params[:password])
         render json: {
             user: user,
@@ -16,7 +16,7 @@ class UsersController < ApplicationController
 
     private
     def strong_user_params
-        params.require(:username)
+        params.require(:email)
     end
 
 end
