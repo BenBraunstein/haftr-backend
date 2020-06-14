@@ -8,7 +8,7 @@ class AuthController < ApplicationController
                 token: JWT.encode({userId: user.id}, ENV['JWT_SECRET'])
             }
         else
-            render json: { errors: "Invalid username, password combination."}
+            render json: { error: "Invalid username, password combination."}
         end
     end
 

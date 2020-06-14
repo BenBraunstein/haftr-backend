@@ -6,12 +6,18 @@ class UsersController < ApplicationController
     end
 
     def create
-        user = User.create({email: params['email'], admin:false})
+        user = User.create({email: params['email'].downcase, admin:false})
         user.update(password: params[:password])
-        render json: {
-            user: user,
-            token: JWT.encode({userId: user.id}, ENV['JWT_SECRET'])
-        }
+        if user.id != nil 
+            render json: {
+                user: user,
+                token: JWT.encode({userId: user.id}, ENV['JWT_SECRET'])
+            }
+        else
+            render json: {
+                error: "Error creating user. Email is already taken"
+            }
+        end
     end
 
     private
