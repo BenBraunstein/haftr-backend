@@ -4,7 +4,10 @@ class AuthController < ApplicationController
         user = User.find_by('lower(email) = ?', params[:email].downcase)
         if user && user.authenticate(params[:password])
             render json: {
-                user: user,
+                user: {
+                    info: user,
+                    alum: user.alumni
+                },
                 token: JWT.encode({userId: user.id}, ENV['JWT_SECRET'])
             }
         else
@@ -18,7 +21,12 @@ class AuthController < ApplicationController
             user_id = JWT.decode(token, ENV["JWT_SECRET"])[0]["userId"]            
             user = User.find(user_id)
             if user 
-                render json: user
+                render json: {
+                    user: {
+                        info: user,
+                        alum: user.alumni
+                    }
+                }
             else
                 render json: { errors: "Invalid login token, please re-log in manually"}
             end

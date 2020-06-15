@@ -10,7 +10,10 @@ class UsersController < ApplicationController
         user.update(password: params[:password])
         if user.id != nil 
             render json: {
-                user: user,
+                user: {
+                    info: user,
+                    alum: user.alumni
+                },
                 token: JWT.encode({userId: user.id}, ENV['JWT_SECRET'])
             }
         else
