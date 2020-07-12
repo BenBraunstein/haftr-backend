@@ -14,7 +14,6 @@ class AlumnisController < ApplicationController
            end
         end
         render json: alumnis
-
     end
 
     def create 

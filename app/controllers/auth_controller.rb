@@ -3,13 +3,29 @@ class AuthController < ApplicationController
     def login 
         user = User.find_by('lower(email) = ?', params[:email].downcase)
         if user && user.authenticate(params[:password])
-            render json: {
-                user: {
-                    info: user,
-                    alum: user.alumni
-                },
-                token: JWT.encode({userId: user.id}, ENV['JWT_SECRET'])
-            }
+            if user.alumni.photo.attached?
+                alumResp = {
+                    user: {
+                        info: user,
+                        alum: user.alumni,
+                        siblings: user.alumni.siblings,
+                        children: user.alumni.children,
+                        photo: url_for(user.alumni.photo)
+                    },
+                    token: JWT.encode({userId: user.id}, ENV['JWT_SECRET'])
+                }
+            else
+                alumResp = {
+                    user: {
+                        info: user,
+                        alum: user.alumni,
+                        siblings: user.alumni.siblings,
+                        children: user.alumni.children,
+                    },
+                    token: JWT.encode({userId: user.id}, ENV['JWT_SECRET'])
+                }
+            end
+            render json: alumResp
         else
             render json: { error: "Invalid username, password combination."}
         end
@@ -21,12 +37,27 @@ class AuthController < ApplicationController
             user_id = JWT.decode(token, ENV["JWT_SECRET"])[0]["userId"]            
             user = User.find(user_id)
             if user 
-                render json: {
-                    user: {
-                        info: user,
-                        alum: user.alumni
+                if user.alumni.photo.attached?
+                    alumResp = {
+                        user: {
+                            info: user,
+                            alum: user.alumni,
+                            siblings: user.alumni.siblings,
+                            children: user.alumni.children,
+                            photo: url_for(user.alumni.photo)
+                        }
                     }
-                }
+                else
+                    alumResp = {
+                        user: {
+                            info: user,
+                            alum: user.alumni,
+                            siblings: user.alumni.siblings,
+                            children: user.alumni.children,
+                        }
+                    }
+                end
+                render json: alumResp
             else
                 render json: { errors: "Invalid login token, please re-log in manually"}
             end
